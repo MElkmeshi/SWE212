@@ -72,21 +72,13 @@ string karatsuba(string x, string y) {
     if (n == 1) return to_string((x[0] - '0') * (y[0] - '0'));
 
     string a = x.substr(0, n / 2);
-    cout << "a: " << a << endl;
     string b = x.substr(n / 2, n - n / 2);
-    cout << "b: " << b << endl;
     string c = y.substr(0, n / 2);
-    cout << "c: " << c << endl;
     string d = y.substr(n / 2, n - n / 2);
-    cout << "d: " << d << endl;
     string ac = karatsuba(a, c);
-    cout << "ac: " << ac << endl;
     string bd = karatsuba(b, d);
-    cout << "bd: " << bd << endl;
     string abcd = karatsuba(add(a, b), add(c, d));
-    cout << "abcd: " << abcd << endl;
     string adbc = subtract(abcd, add(ac, bd));
-    cout << "adbc: " << adbc << endl;
     for (int i = 0; i < 2 * (n - n / 2); i++)
         ac += '0';
     for (int i = 0; i < n - n / 2; i++)
@@ -94,7 +86,6 @@ string karatsuba(string x, string y) {
 
     string result = add(add(ac, adbc), bd);
     result.erase(0, min(result.find_first_not_of('0'), result.size()-1));
-    cout << "result: " << result << endl;
     return result;
 }
 
@@ -145,7 +136,7 @@ string modInverse(string a, string m) {
     string aModM = mod(a, stoll(m));
     cout << "aModM: " << aModM << endl;
     for (ll x = 1; x < stoll(m); x++){
-     //   cout << "x: " << x << endl;
+        // cout << "x: " << x << endl;
        if (mod(karatsuba(aModM, to_string(x)), stoll(m)) == "1")
           return to_string(x);
     }
@@ -169,13 +160,9 @@ string findRandomE(string phi) {
 }
 string findSmallestE(string phi) {
     string e = "2";
-
-    // Make sure gcd(e, phi) = 1
     while (gcdLarge(stoll(e), (char*)phi.c_str()) != 1) {
-        cout << "e: " << e << endl;
         e = to_string(stoll(e) + 1);
     }
-
     return e;
 }
 
@@ -189,7 +176,7 @@ void RSA(string p, string q) {
 
     // Find a random encryption exponent e
     string e = findSmallestE(phi);
-    cout << "we got e!!!! "<<e << endl;
+    cout << "e "<<e << endl;
     // Compute the private key d
     string d = modInverse(e, phi);
 
@@ -199,9 +186,9 @@ void RSA(string p, string q) {
 }
 
 int main() {
-    string a = "12";
-    string b = "25";
-    karatsuba(a, b);
+    string a = "3";
+    string b = "353";
+    RSA(a, b);
     // auto start = chrono::high_resolution_clock::now();
     // string result_karatsuba = karatsuba(a, b);
     // auto stop = chrono::high_resolution_clock::now();

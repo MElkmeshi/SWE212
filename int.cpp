@@ -53,7 +53,7 @@ long long int encrypt(double message)
 {
 	long int e = public_key;
 	long long int encrpyted_text = 1;
-	while (e--) {//message^public_key & n
+	while (e--) {//message^public_key % n
 		encrpyted_text *= message;
 		encrpyted_text %= n;
 	}
@@ -63,7 +63,7 @@ long long int decrypt(int encrpyted_text)
 {
 	long int d = private_key;
 	long long int decrypted = 1;
-	while (d--) {//encrpyted_text^private_key & n
+	while (d--) {//encrpyted_text^private_key % n
 		decrypted *= encrpyted_text;
 		decrypted %= n;
 	}
@@ -72,8 +72,7 @@ long long int decrypt(int encrpyted_text)
 vector<int> encoder(string message)
 {
 	vector<int> form;
-	// calling the encrypting function in encoding function
-	for (auto& letter : message) {
+	for (char letter : message) {
 		form.push_back(encrypt((int)letter));
 	}
 	return form;
@@ -82,37 +81,33 @@ string decoder(vector<int> encoded)
 {
 	string s;
 	// calling the decrypting function decoding function
-	for (auto& num : encoded)
+	for (int num : encoded)
 		s += decrypt(num);
 	return s;
 }
 int main()
 {
-	long int p = 31136353 ;
-	long int q = 31136353 ;
-	cout << "karatsuba" << endl;
+	long int p = 353 ;
+	cout << "p: " << p << endl;
+	long int q = 3 ;
+	cout << "q: " << q << endl;
 	n = karatsuba(p,q);
 	cout << "n " << n << endl;
-	// cout << "brute force" << endl;
-	// n = brute_force(p, q);
-	// cout << "n " << n << endl;
 	long long int fi = karatsuba((p - 1), (q - 1));
+	cout << "fi: " << fi << endl;
 	long long int e = 2;
 	while (e < fi) { 
-		cout << "e: " << e << endl;
 		if (gcd(e, fi) == 1)
 			break;
 		e++;
 	}
-	cout << "fi: " << fi << endl;
 	cout << "e: " << e<<endl;
 	public_key = e;
-	long long int d = 2020779;
+	long long int d = 2;
 	while (true) {
-		cout << "d: " << d << endl;
 		if (karatsuba(d , e) % fi == 1)
 			break;
-		d+=2;
+		d++;
 	}
 	cout << "d: " << d << endl;
 	private_key = d;
