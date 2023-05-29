@@ -88,16 +88,18 @@ string decoder(vector<int> encoded)
 }
 int main()
 {
-	long int p = 1289;
-	long int q = 7219;
-	cout << "brute force" << endl;
+	long int p = 31136353 ;
+	long int q = 31136353 ;
+	cout << "karatsuba" << endl;
 	n = karatsuba(p,q);
 	cout << "n " << n << endl;
-	n = brute_force(p, q);
-	cout << "n " << n << endl;
-	long long int fi = (p - 1) * (q - 1);
+	// cout << "brute force" << endl;
+	// n = brute_force(p, q);
+	// cout << "n " << n << endl;
+	long long int fi = karatsuba((p - 1), (q - 1));
 	long long int e = 2;
 	while (e < fi) { 
+		cout << "e: " << e << endl;
 		if (gcd(e, fi) == 1)
 			break;
 		e++;
@@ -105,11 +107,12 @@ int main()
 	cout << "fi: " << fi << endl;
 	cout << "e: " << e<<endl;
 	public_key = e;
-	long long int d = 2;
+	long long int d = 2020779;
 	while (true) {
-		if ((d * e) % fi == 1)
+		cout << "d: " << d << endl;
+		if (karatsuba(d , e) % fi == 1)
 			break;
-		d++;
+		d+=2;
 	}
 	cout << "d: " << d << endl;
 	private_key = d;
