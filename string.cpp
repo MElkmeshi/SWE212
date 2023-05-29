@@ -189,17 +189,17 @@ int main() {
     string a = "3";
     string b = "353";
     RSA(a, b);
-    // auto start = chrono::high_resolution_clock::now();
-    // string result_karatsuba = karatsuba(a, b);
-    // auto stop = chrono::high_resolution_clock::now();
-    // auto duration_karatsuba = chrono::duration_cast<chrono::microseconds>(stop - start);
-    // cout << "Karatsuba time: " << duration_karatsuba.count() << " microseconds" << endl;
+    auto start = chrono::high_resolution_clock::now();
+    string result_karatsuba = karatsuba(a, b);
+    auto stop = chrono::high_resolution_clock::now();
+    auto duration_karatsuba = chrono::duration_cast<chrono::microseconds>(stop - start);
+    cout << "Karatsuba time: " << duration_karatsuba.count() << " microseconds" << endl;
 
-    // start = chrono::high_resolution_clock::now();
-    // string result_brute_force = brute_force(a, b);
-    // stop = chrono::high_resolution_clock::now();
-    // auto duration_brute_force = chrono::duration_cast<chrono::microseconds>(stop - start);
-    // cout << "Brute force time: " << duration_brute_force.count() << " microseconds" << endl;
+    start = chrono::high_resolution_clock::now();
+    string result_brute_force = brute_force(a, b);
+    stop = chrono::high_resolution_clock::now();
+    auto duration_brute_force = chrono::duration_cast<chrono::microseconds>(stop - start);
+    cout << "Brute force time: " << duration_brute_force.count() << " microseconds" << endl;
 
     return 0;
 }

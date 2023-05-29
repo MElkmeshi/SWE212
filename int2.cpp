@@ -21,25 +21,7 @@ long long int gcd(long long int a, long long int h)
 		h = temp;
 	}
 }
-long long int karatsuba(long int x, long int y) {
-	int n = max(to_string(x).size(), to_string(y).size());
-	// base case
-	if (n < 2)
-		return x * y;
-	//divide 
-	/*new n*/n = (n / 2) + (n % 2);
-	long int multiplier = pow(10, n);
-	long int b = x / multiplier;
-	long int a = x - (b * multiplier);
-	long int d = y / multiplier;
-	long int c = y - (d * multiplier);
-	long long int ac = karatsuba(a, c);
-	long long int bd = karatsuba(b, d);
-	long long int abcd = karatsuba((a + b), (c + d));
-	//combine
-	return ac + ((abcd - ac - bd) * multiplier) + (bd * (pow(10, 2 * n)));
-}
-long long int brute_force(long int a, long int b) {
+int brute_force(long int a, long int b) {
 	long int result = 0;
 	long int multiplier = 1;
 	while (b > 0) {
@@ -88,34 +70,34 @@ string decoder(vector<int> encoded)
 }
 int main()
 {
-	long int p = 353 ;
+	long int p = 353;
 	cout << "p: " << p << endl;
-	long int q = 3 ;
+	long int q = 3;
 	cout << "q: " << q << endl;
-	n = karatsuba(p,q);
+	n = brute_force(p, q);
 	cout << "n " << n << endl;
-	long long int fi = karatsuba((p - 1), (q - 1));
+	long long int fi = brute_force((p - 1), (q - 1));
 	cout << "fi: " << fi << endl;
 	long long int e = 2;
-	while (e < fi) { 
+	while (e < fi) {
 		if (gcd(e, fi) == 1)
 			break;
 		e++;
 	}
-	cout << "e: " << e<<endl;
+	cout << "e: " << e << endl;
 	public_key = e;
 	long long int d = 2;
 	while (true) {
-		if (karatsuba(d , e) % fi == 1)
+		if (brute_force(d, e) % fi == 1)
 			break;
 		d++;
 	}
 	cout << "d: " << d << endl;
 	private_key = d;
-
 	string message = "Test Message";
 	cout << "Initial message:\n" << message;
 
+	// Measure encoding time
 	auto start_encode = chrono::high_resolution_clock::now();
 	vector<int> coded = encoder(message);
 	auto stop_encode = chrono::high_resolution_clock::now();
@@ -132,6 +114,7 @@ int main()
 	auto duration_decode = chrono::duration_cast<chrono::microseconds>(stop_decode - start_decode);
 	cout << "\n\nThe decoded message (decrypted by private key)\n";
 	cout << decoded << endl;
-	cout << "Decoding time By karatsuba is : " << duration_decode.count() << " microseconds" << endl;
+	cout << "Decoding time By Brute Force is : " << duration_decode.count() << " microseconds" << endl;
+
 	return 0;
 }
