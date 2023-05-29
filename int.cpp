@@ -87,9 +87,9 @@ string decoder(vector<int> encoded)
 }
 int main()
 {
-	long int p = 353 ;
+	long int p = 13 ;
 	cout << "p: " << p << endl;
-	long int q = 3 ;
+	long int q = 17 ;
 	cout << "q: " << q << endl;
 	n = karatsuba(p,q);
 	cout << "n " << n << endl;

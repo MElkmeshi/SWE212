@@ -4,7 +4,11 @@
 #include <random>
 #include<string>
 #include <algorithm>
+#include <vector>
 using namespace std;
+string d;
+string e;
+string n;
 
 string add(string a, string b) {
     string result = "";
@@ -134,7 +138,7 @@ string mod(string number, int a) {
 }
 string modInverse(string a, string m) {
     string aModM = mod(a, stoll(m));
-    cout << "aModM: " << aModM << endl;
+    // cout << "aModM: " << aModM << endl;
     for (ll x = 1; x < stoll(m); x++){
         // cout << "x: " << x << endl;
        if (mod(karatsuba(aModM, to_string(x)), stoll(m)) == "1")
@@ -142,21 +146,24 @@ string modInverse(string a, string m) {
     }
     return "1";
 }
-string findRandomE(string phi) {
-    // Random number generation
-    unsigned seed = chrono::system_clock::now().time_since_epoch().count();
-    default_random_engine generator (seed);
+string encrypt(int message)
+{
+	long int ee = stoll(e);
+	string encrpyted_text = "1";
+	while (ee--) {//message^public_key % n
+		encrpyted_text = karatsuba(encrpyted_text,to_string(message));
+		encrpyted_text = mod(encrpyted_text, stoll(n));
+	}
 
-    // Make sure e < phi
-    uniform_int_distribution<int> distribution(2, stoll(phi) - 1);
-    string e = to_string(distribution(generator));
-
-    // Make sure gcd(e, phi) = 1
-    while (gcdLarge(stoll(e), (char*)phi.c_str()) != 1) {
-        e = to_string(distribution(generator));
-    }
-
-    return e;
+	return encrpyted_text;
+}
+vector<string> encoder(string message)
+{
+	vector<string> form;
+	for (char letter : message) {
+		form.push_back(encrypt((int)letter));
+	}
+	return form;
 }
 string findSmallestE(string phi) {
     string e = "2";
@@ -165,43 +172,76 @@ string findSmallestE(string phi) {
     }
     return e;
 }
+std::string decrypt(int encrpyted_text)
+{
+	long int dd = stoll(d);
+	std::string decrypted = "1";
+	while (dd--) {//encrpyted_text^private_key % n
+        decrypted = karatsuba(to_string(encrpyted_text), decrypted);
+        decrypted = mod(decrypted, stoll(n));
+	}
+	return decrypted;
+}
+string decoder(vector<string> encoded)
+{
+	string s;
+	// calling the decrypting function decoding function
+	for (string num : encoded)
+		s += (char)stoi(decrypt(stoll(num)));
+	return s;
+}
 
 void RSA(string p, string q) {
-    string n = karatsuba(p, q);
+    n = karatsuba(p, q);
+    cout << "p: " << p << endl;
+    cout << "q: " << q << endl;
     cout << "n: " << n << endl;
 
     // Compute Euler's totient function
     string phi = karatsuba(subtract(p, "1"), subtract(q, "1"));
-    cout << "phi: " << phi << endl;
+    cout << "fi: " << phi << endl;
 
     // Find a random encryption exponent e
-    string e = findSmallestE(phi);
+    e = findSmallestE(phi);
     cout << "e "<<e << endl;
     // Compute the private key d
-    string d = modInverse(e, phi);
+    d = modInverse(e, phi);
 
     // Output the public key (n, e) and private key (n, d)
     cout << "Public key: (" << n << ", " << e << ")" << endl;
     cout << "Private key: (" << n << ", " << d << ")" << endl;
+    
+	string message = "Test Message";
+	cout << "Initial message:\n" << message;
+	vector<string> coded = encoder(message);
+	cout << "\n\nThe encoded message(encrypted by public key)\n";
+	for (auto& p : coded)
+		cout << p;
+	cout << "\n\nThe decoded message(decrypted by private "
+		"key)\n";
+	cout << decoder(coded) << endl;
+
+
 }
 
 int main() {
-    string a = "3";
-    string b = "353";
+    string a = "173";
+    string b = "137";
     RSA(a, b);
-    // auto start = chrono::high_resolution_clock::now();
-    // string result_karatsuba = karatsuba(a, b);
-    // auto stop = chrono::high_resolution_clock::now();
-    // auto duration_karatsuba = chrono::duration_cast<chrono::microseconds>(stop - start);
-    // cout << "Karatsuba time: " << duration_karatsuba.count() << " microseconds" << endl;
+    auto start = chrono::high_resolution_clock::now();
+    string result_karatsuba = karatsuba(a, b);
+    auto stop = chrono::high_resolution_clock::now();
+    auto duration_karatsuba = chrono::duration_cast<chrono::microseconds>(stop - start);
+    cout << "Karatsuba time: " << duration_karatsuba.count() << " microseconds" << endl;
 
-    // start = chrono::high_resolution_clock::now();
-    // string result_brute_force = brute_force(a, b);
-    // stop = chrono::high_resolution_clock::now();
-    // auto duration_brute_force = chrono::duration_cast<chrono::microseconds>(stop - start);
-    // cout << "Brute force time: " << duration_brute_force.count() << " microseconds" << endl;
+    start = chrono::high_resolution_clock::now();
+    string result_brute_force = brute_force(a, b);
+    stop = chrono::high_resolution_clock::now();
+    auto duration_brute_force = chrono::duration_cast<chrono::microseconds>(stop - start);
+    cout << "Brute force time: " << duration_brute_force.count() << " microseconds" << endl;
 
     return 0;
+    
 }
 /*
 Karatsuba time: 558813 microseconds
