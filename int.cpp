@@ -38,7 +38,6 @@ long long int karatsuba(long int x, long int y) {
 	//combine
 	return ac + ((abcd - ac - bd) * multiplier) + (bd * (pow(10, 2 * n)));
 }
-
 long long int brute_force(long int a, long int b) {
 	long int result = 0;
 	long int multiplier = 1;
@@ -50,9 +49,6 @@ long long int brute_force(long int a, long int b) {
 	}
 	return result;
 }
-
-
-// to encrypt the given number
 long long int encrypt(double message)
 {
 	long int e = public_key;
@@ -63,7 +59,6 @@ long long int encrypt(double message)
 	}
 	return encrpyted_text;
 }
-// to decrypt the given number
 long long int decrypt(int encrpyted_text)
 {
 	long int d = private_key;
@@ -74,9 +69,6 @@ long long int decrypt(int encrpyted_text)
 	}
 	return decrypted;
 }
-// first converting each character to its ASCII value and
-// then encoding it then decoding the number to get the
-// ASCII and converting it to character
 vector<int> encoder(string message)
 {
 	vector<int> form;
@@ -96,8 +88,6 @@ string decoder(vector<int> encoded)
 }
 int main()
 {
-	cout << karatsuba(1289,7219) << endl;
-	return 0;
 	long int p = 1289;
 	long int q = 7219;
 	cout << "brute force" << endl;
